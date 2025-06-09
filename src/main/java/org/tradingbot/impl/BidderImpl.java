@@ -2,51 +2,93 @@ package org.tradingbot.impl;
 
 import java.security.InvalidParameterException;
 
+import org.springframework.lang.NonNull;
 import org.tradingbot.bidder.Bidder;
+import org.tradingbot.bidder.BidderWinEvaluator;
 import org.tradingbot.exceptions.InternalStrategyException;
-import org.tradingbot.strategies.BidderStrategy;
+import org.tradingbot.bidder.BidderStrategy;
 
 public class BidderImpl implements Bidder {
-    private BidderStrategy strategy;
-    private BidderState state;
+    private final BidderStrategy strategy;
+    private final BidderWinEvaluator winnerEvaluator;
+    private BidderState ownState;
 
-    public BidderImpl(int quantity, int cash, BidderStrategy strategy) throws InvalidParameterException {
+    // Keep track of both of the bidder states for strategies
+    private BidderContext bidderContext;
+
+    /**
+     * Bidder implementation using default win evaluator
+     * @param quantity
+     *                Initial quantity
+     * @param cash
+     *                Initial cash
+     * @param strategy
+     *                The wished strategy
+     * @throws InvalidParameterException
+     *                if quantity, cash are incorrect, or strategy is null
+     */
+    public BidderImpl(int quantity, int cash, @NonNull BidderStrategy strategy, @NonNull BidderWinEvaluator winnerEvaluator) {
         this.strategy = strategy;
+        this.winnerEvaluator = winnerEvaluator;
         init(quantity, cash);
     }
 
     @Override
     public void init(int quantity, int cash) throws InvalidParameterException {
-        if (quantity <= 0 || cash <= 0) {
+        if (quantity < 0 || cash <= 0) {
             throw new InvalidParameterException("Incorrect quantity or cash supplied");
         }
-        state = new BidderState(quantity, cash);
+        ownState = new BidderState(0, cash, quantity);
+        BidderState otherState = new BidderState(0, cash, quantity); // to keep track of the other bidder state
+        bidderContext = new BidderContext(ownState, otherState);
     }
 
     @Override
     public int placeBid() throws InternalStrategyException {
-        var qty = strategy.getQuantity();
-        if (qty <= 0) {
-            throw new InternalStrategyException("Received by the strategy quantity is not valid");
+        var cashOpt = strategy.nextBid(bidderContext);
+        if (cashOpt.isEmpty()) {
+            return 0; // no cash left: bid 0
         }
-        state.decreaseCash(qty);
-        return qty;
+
+        int cash = cashOpt.getAsInt();
+        if (cash > ownState.getCash()) { // should not happen
+            throw new InternalStrategyException("Received by the strategy cash exceeds the left amount");
+        }
+        ownState.decreaseCash(cash);
+        return cash;
     }
 
     @Override
     public void bids(int own, int other) throws InvalidParameterException {
-        if (own <= 0 || other <= 0) {
+        if (own < 0 || other < 0) {
             throw new InvalidParameterException("Either one or both of supplied quantities are incorrect");
         }
-        state.addHistory(own, other);
-        increaseIfWon(own, other);
+        updateOwnState(own, other);
+        updateOpponentState(other, own);
+
+        strategy.finishRound();
+        ownState.addHistory(own, other);
     }
 
-    private void increaseIfWon(int own, int other) {
-        if (own > other) {
-            state.increaseQuantity(2);
-        } else if (own == other) { // cover edge case described in the task
-            state.increaseQuantity(1);
-        }
+    /**
+     * Increases qty if win conditions are met
+     * @param own
+     *            first bidder cash
+     * @param other
+     *            second bidder cash
+     */
+    private void updateOwnState(int own, int other) {
+        var wonAmount = winnerEvaluator.evaluateWonQuantity(own, other);
+        ownState.increaseQuantity(wonAmount);
+    }
+
+    /**
+     * Calculate the opponents won quantity and cash
+     */
+    private void updateOpponentState(int other, int own) {
+        var wonQuantity = winnerEvaluator.evaluateWonQuantity(other, own);
+        BidderState otherState = bidderContext.other();
+        otherState.increaseQuantity(wonQuantity);
+        otherState.decreaseCash(other);
     }
 }

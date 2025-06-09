@@ -1,9 +1,21 @@
 package org.tradingbot;
 
-// import org.springframework.boot.*;
+import org.tradingbot.core.Auction;
+import org.tradingbot.strategies.BalancedBidderStrategy;
+import org.tradingbot.bidder.BidderStrategy;
+import org.tradingbot.strategies.builder.enums.BidderStrategyGreediness;
+import org.tradingbot.strategies.builder.BidderStrategyParametersBuilder;
 
 public class TradingBotApp {
     public static void main(String[] args) {
-        System.out.println("It actually works!");
+        BidderStrategy ownStrat = new BalancedBidderStrategy(BidderStrategyParametersBuilder.defaultBuilder()
+                .withGreediness(BidderStrategyGreediness.WEAK)
+                .withRiskRewardRatio(3, 10)
+                .build());
+        BidderStrategy opponentStrat = new BalancedBidderStrategy(BidderStrategyParametersBuilder.defaultBuilder()
+                .withGreediness(BidderStrategyGreediness.STRONG)
+                .build());
+
+        Auction auction = new Auction(10, ownStrat, opponentStrat);
     }
 }
