@@ -1,13 +1,14 @@
 package tests.strategies;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.tradingbot.impl.BidderContext;
-import org.tradingbot.impl.BidderState;
-import org.tradingbot.strategies.GodlikeBidderStrategy;
-import org.tradingbot.strategies.builder.BidderStrategyParameters;
-import org.tradingbot.strategies.builder.BidderStrategyParametersBuilder;
-import org.tradingbot.strategies.builder.enums.BidderStrategyGreediness;
+import com.optimax.tradingbot.impl.BidderContext;
+import com.optimax.tradingbot.impl.BidderState;
+import com.optimax.tradingbot.strategies.GodlikeBidderStrategy;
+import com.optimax.tradingbot.strategies.builder.BidderStrategyParameters;
+import com.optimax.tradingbot.strategies.builder.BidderStrategyParametersBuilder;
+import com.optimax.tradingbot.strategies.builder.enums.BidderStrategyGreediness;
 
 import java.util.OptionalInt;
 import java.util.Random;
@@ -27,7 +28,8 @@ public class GodlikeBidderStrategyTest {
     }
 
     @Test
-    public void testInitialBid_Adaptive() {
+    @DisplayName("Should generate a valid initial bid adaptively")
+    public void shouldGenerateValidInitialBidAdaptively() {
         GodlikeBidderStrategy strategy = new GodlikeBidderStrategy(params, new Random(42));
 
         var own = new BidderState(0, 100, 100);
@@ -35,12 +37,13 @@ public class GodlikeBidderStrategyTest {
         BidderContext ctx = new BidderContext(own, other);
 
         OptionalInt bid = strategy.nextBid(ctx);
-        assertTrue(bid.isPresent());
-        assertTrue(bid.getAsInt() > 0 && bid.getAsInt() <= 49);
+        assertTrue(bid.isPresent(), "Bid should be present");
+        assertTrue(bid.getAsInt() > 0 && bid.getAsInt() <= 49, "Bid should be positive and within cash limits (<=49 for initial balanced bid)");
     }
 
     @Test
-    public void testBid_AdaptiveAfterRounds() {
+    @DisplayName("Should generate an adaptive bid after several rounds based on history")
+    public void shouldGenerateAdaptiveBidAfterRoundsBasedOnHistory() {
         GodlikeBidderStrategy strategy = new GodlikeBidderStrategy(params, new Random(42));
 
         var own = new BidderState(20, 100, 40);
@@ -55,12 +58,13 @@ public class GodlikeBidderStrategyTest {
         strategy.finishRound();
 
         OptionalInt bid = strategy.nextBid(ctx);
-        assertTrue(bid.isPresent());
-        assertTrue(bid.getAsInt() > 0 && bid.getAsInt() <= 40);
+        assertTrue(bid.isPresent(), "Bid should be present");
+        assertTrue(bid.getAsInt() > 0 && bid.getAsInt() <= 40, "Bid should be positive and within current cash limits");
     }
 
     @Test
-    public void testNoBid_IfBroke() {
+    @DisplayName("Should return empty bid if own bidder is out of cash")
+    public void shouldReturnEmptyBidWhenOutOfCash() {
         GodlikeBidderStrategy strategy = new GodlikeBidderStrategy(params, new Random(42));
 
         var own = new BidderState(50, 100, 0);
@@ -68,6 +72,6 @@ public class GodlikeBidderStrategyTest {
         BidderContext ctx = new BidderContext(own, other);
 
         OptionalInt bid = strategy.nextBid(ctx);
-        assertTrue(bid.isEmpty());
+        assertTrue(bid.isEmpty(), "Bid should be empty when own bidder has no cash");
     }
 }

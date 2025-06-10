@@ -1,14 +1,15 @@
 package tests.strategies;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.tradingbot.impl.BidderContext;
-import org.tradingbot.impl.BidderState;
-import org.tradingbot.strategies.RandomBidderStrategy;
-import org.tradingbot.strategies.builder.BidderStrategyParameters;
-import org.tradingbot.strategies.builder.BidderStrategyParametersBuilder;
-import org.tradingbot.strategies.builder.enums.BidderStrategyGreediness;
+import com.optimax.tradingbot.impl.BidderContext;
+import com.optimax.tradingbot.impl.BidderState;
+import com.optimax.tradingbot.strategies.RandomBidderStrategy;
+import com.optimax.tradingbot.strategies.builder.BidderStrategyParameters;
+import com.optimax.tradingbot.strategies.builder.BidderStrategyParametersBuilder;
+import com.optimax.tradingbot.strategies.builder.enums.BidderStrategyGreediness;
 
 import java.util.OptionalInt;
 
@@ -27,7 +28,8 @@ public class RandomBidderStrategyTest {
     }
 
     @RepeatedTest(10)
-    public void testRandomBid_WithinLimits() {
+    @DisplayName("Should generate a random bid within specified limits")
+    public void shouldGenerateRandomBidWithinLimits() {
         RandomBidderStrategy strategy = new RandomBidderStrategy(params);
 
         var own = new BidderState(0, 100, 100);
@@ -39,7 +41,8 @@ public class RandomBidderStrategyTest {
     }
 
     @Test
-    public void testNoBid_WhenOutOfCash() {
+    @DisplayName("Should return empty bid when own bidder is out of cash")
+    public void shouldReturnEmptyBidWhenOutOfCash() {
         RandomBidderStrategy strategy = new RandomBidderStrategy(params);
 
         var own = new BidderState(0, 100, 0);
@@ -51,7 +54,8 @@ public class RandomBidderStrategyTest {
     }
 
     @Test
-    public void testRandomBidRespectsGreedLimit() {
+    @DisplayName("Should generate random bids respecting the greediness limit")
+    public void shouldGenerateRandomBidRespectingGreedLimit() {
         var own = new BidderState(0, 100, 100);
         var other = new BidderState(0, 100, 100);
         var ctx = new BidderContext(own, other);
