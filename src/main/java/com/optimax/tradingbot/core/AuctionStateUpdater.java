@@ -13,7 +13,7 @@ public record AuctionStateUpdater(BidderWinEvaluator ownWinEvaluator, BidderWinE
      * @param ownBid   The bid placed by the "own" bidder.
      * @param otherBid The bid placed by the "other" bidder.
      */
-    public void updateState(AuctionState state, int ownBid, int otherBid) {
+    public void updateAuctionState(AuctionState state, int ownBid, int otherBid) {
         // Evaluate won quantities based on the rules.
         int ownWonQuantity = ownWinEvaluator.evaluateWonQuantity(ownBid, otherBid);
         int otherWonQuantity = otherWinEvaluator.evaluateWonQuantity(otherBid, ownBid);
@@ -23,8 +23,7 @@ public record AuctionStateUpdater(BidderWinEvaluator ownWinEvaluator, BidderWinE
         state.setOtherBidderCurrentQuantityWon(state.getOtherBidderCurrentQuantityWon() + otherWonQuantity);
 
         // Update remaining quantity
-        // Note: The problem states bids are for 2 QU. If a tie occurs, both get 1 QU,
-        // so 2 QU are still consumed from the total.
+        // Note: Assumes that the sum of possible quantity is always the same as the auctioned amount
         state.setRemainingQuantity(state.getRemainingQuantity() - (ownWonQuantity + otherWonQuantity));
 
         // Update cash

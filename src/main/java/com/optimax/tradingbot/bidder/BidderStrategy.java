@@ -17,7 +17,7 @@ public interface BidderStrategy {
      * @return
      *        empty if no bid possible, otherwise finite amount of cash to be sacrificed
      */
-    OptionalInt nextBid(BidderContext ctx);
+    OptionalInt nextBid(BidderState own, BidderContext ctx);
 
     /**
      * Finish the round after all the bids done

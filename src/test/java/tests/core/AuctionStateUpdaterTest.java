@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AuctionStateUpdaterTest {
+class AuctionStateUpdaterTest {
     private static final int INITIAL_TOTAL_QUANTITY = 100;
     private static final int INITIAL_BASE_CASH = 500;
 
@@ -30,7 +30,7 @@ public class AuctionStateUpdaterTest {
 
     @Test
     @DisplayName("Should update state when both bidders win 1 quantity each")
-    void shouldUpdateStateWhenBothWinOneQuantity() {
+    void shouldUpdateAuctionStateWhenBothWinOneQuantity() {
         BidderWinEvaluator ownWinEvaluator = new TestBidderWinEvaluator(1);
         BidderWinEvaluator otherWinEvaluator = new TestBidderWinEvaluator(1);
         AuctionStateUpdater updater = new AuctionStateUpdater(ownWinEvaluator, otherWinEvaluator);
@@ -38,7 +38,7 @@ public class AuctionStateUpdaterTest {
         int ownBid = 10;
         int otherBid = 10;
 
-        updater.updateState(auctionState, ownBid, otherBid);
+        updater.updateAuctionState(auctionState, ownBid, otherBid);
 
         assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
                 "Own bidder's cash should decrease by own bid");
@@ -54,7 +54,7 @@ public class AuctionStateUpdaterTest {
 
     @Test
     @DisplayName("Should update state when only own bidder wins 2 quantity")
-    void shouldUpdateStateWhenOnlyOwnWinsTwoQuantity() {
+    void shouldUpdateAuctionStateWhenOnlyOwnWinsTwoQuantity() {
         BidderWinEvaluator ownWinEvaluator = new TestBidderWinEvaluator(2);
         BidderWinEvaluator otherWinEvaluator = new TestBidderWinEvaluator(0);
         AuctionStateUpdater updater = new AuctionStateUpdater(ownWinEvaluator, otherWinEvaluator);
@@ -62,7 +62,7 @@ public class AuctionStateUpdaterTest {
         int ownBid = 20;
         int otherBid = 5;
 
-        updater.updateState(auctionState, ownBid, otherBid);
+        updater.updateAuctionState(auctionState, ownBid, otherBid);
 
         assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
                 "Own bidder's cash should decrease by own bid");
@@ -78,7 +78,7 @@ public class AuctionStateUpdaterTest {
 
     @Test
     @DisplayName("Should update state when only other bidder wins 2 quantity")
-    void shouldUpdateStateWhenOnlyOtherWinsTwoQuantity() {
+    void shouldUpdateAuctionStateWhenOnlyOtherWinsTwoQuantity() {
         BidderWinEvaluator ownWinEvaluator = new TestBidderWinEvaluator(0);
         BidderWinEvaluator otherWinEvaluator = new TestBidderWinEvaluator(2);
         AuctionStateUpdater updater = new AuctionStateUpdater(ownWinEvaluator, otherWinEvaluator);
@@ -86,7 +86,7 @@ public class AuctionStateUpdaterTest {
         int ownBid = 5;
         int otherBid = 20;
 
-        updater.updateState(auctionState, ownBid, otherBid);
+        updater.updateAuctionState(auctionState, ownBid, otherBid);
 
         assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
                 "Own bidder's cash should decrease by own bid");
@@ -110,7 +110,7 @@ public class AuctionStateUpdaterTest {
         int ownBid = 5;
         int otherBid = 5;
 
-        updater.updateState(auctionState, ownBid, otherBid);
+        updater.updateAuctionState(auctionState, ownBid, otherBid);
 
         assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
                 "Own bidder's cash should decrease by own bid");
@@ -132,7 +132,7 @@ public class AuctionStateUpdaterTest {
         AuctionStateUpdater updater1 = new AuctionStateUpdater(round1OwnWinEvaluator, round1OtherWinEvaluator);
         int ownBid1 = 10;
         int otherBid1 = 10;
-        updater1.updateState(auctionState, ownBid1, otherBid1);
+        updater1.updateAuctionState(auctionState, ownBid1, otherBid1);
 
         assertEquals(INITIAL_BASE_CASH - ownBid1, auctionState.getOwnBidderCurrentCash());
         assertEquals(INITIAL_BASE_CASH - otherBid1, auctionState.getOtherBidderCurrentCash());
@@ -145,7 +145,7 @@ public class AuctionStateUpdaterTest {
         AuctionStateUpdater updater2 = new AuctionStateUpdater(round2OwnWinEvaluator, round2OtherWinEvaluator);
         int ownBid2 = 15;
         int otherBid2 = 8;
-        updater2.updateState(auctionState, ownBid2, otherBid2);
+        updater2.updateAuctionState(auctionState, ownBid2, otherBid2);
 
         assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2, auctionState.getOwnBidderCurrentCash(),
                 "Own bidder's cash should be cumulative");
@@ -163,7 +163,7 @@ public class AuctionStateUpdaterTest {
         AuctionStateUpdater updater3 = new AuctionStateUpdater(round3OwnWinEvaluator, round3OtherWinEvaluator);
         int ownBid3 = 2;
         int otherBid3 = 3;
-        updater3.updateState(auctionState, ownBid3, otherBid3);
+        updater3.updateAuctionState(auctionState, ownBid3, otherBid3);
 
         assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2 - ownBid3, auctionState.getOwnBidderCurrentCash(),
                 "Own bidder's cash should be cumulative after 3 rounds");

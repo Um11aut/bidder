@@ -1,5 +1,6 @@
 package com.optimax.tradingbot.strategies;
 
+import com.optimax.tradingbot.bidder.BidderState;
 import org.springframework.lang.NonNull;
 import com.optimax.tradingbot.bidder.BidderStrategy;
 import com.optimax.tradingbot.impl.BidderContext;
@@ -26,9 +27,9 @@ public class BalancedBidderStrategy implements BidderStrategy {
 
     @NonNull
     @Override
-    public OptionalInt nextBid(BidderContext ctx) {
+    public OptionalInt nextBid(BidderState own, BidderContext ctx) {
         if (initialQuantity == 0) {
-            initialQuantity = ctx.own().getTotalQuantity();
+            initialQuantity = own.getTotalQuantity();
         }
 
         OptionalInt maxRounds = params.maxRounds();
@@ -46,7 +47,7 @@ public class BalancedBidderStrategy implements BidderStrategy {
         int riskRatio = riskRewardRatio.getFirst();
         int rewardRatio = riskRewardRatio.getSecond();
 
-        int ownCash = ctx.own().getCash();
+        int ownCash = own.getCash();
         if (riskRatio + rewardRatio == 0 || ownCash <= 0) {
             return OptionalInt.empty();
         }
@@ -55,7 +56,7 @@ public class BalancedBidderStrategy implements BidderStrategy {
         double bidEstimate = ownCash * greedMultiplier * ratioFactor;
         int halfQtyLimit = (int) (initialQuantity * 0.5);
         int cappedBid = Math.min((int) Math.round(bidEstimate), halfQtyLimit - 1);
-        int bid = Math.max(1, Math.min(ownCash, cappedBid));
+        int bid = Math.clamp(cappedBid, 1, ownCash);
         return OptionalInt.of(bid);
     }
 

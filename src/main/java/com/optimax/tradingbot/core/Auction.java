@@ -1,5 +1,6 @@
 package com.optimax.tradingbot.core;
 
+import com.optimax.tradingbot.impl.BidderContext;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import com.optimax.tradingbot.bidder.Bidder;
@@ -21,11 +22,12 @@ import java.security.InvalidParameterException;
 import java.util.List;
 
 /**
- * Base Console Auction
- * TODO: Abstract Auction into an interface
+ * Base Auction
  */
 public class Auction implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(Auction.class);
+
+    private final BidderContext context;
     private final Bidder ownBidder;
     private final Bidder otherBidder;
     private final int maxRounds;
@@ -42,8 +44,10 @@ public class Auction implements Runnable {
         }
         BidderWinEvaluator defaultEvaluator = new DefaultBidderWinEvaluator();
 
-        ownBidder = new BidderImpl(totalQuantity, baseCash, ownStrategy, defaultEvaluator);
-        otherBidder = new BidderImpl(totalQuantity, baseCash, opponentStrategy, defaultEvaluator);
+        context = new BidderContext();
+        ownBidder = new BidderImpl(totalQuantity, baseCash, ownStrategy, defaultEvaluator, context);
+        otherBidder = new BidderImpl(totalQuantity, baseCash, opponentStrategy, defaultEvaluator, context);
+
         maxRounds = totalQuantity / 2;
 
         // validators for rounds and final state
@@ -77,7 +81,8 @@ public class Auction implements Runnable {
 
     void auctionLoop(int iterations) {
         for (int i = 0; i < iterations; i++) {
-            int ownBid, otherBid;
+            int ownBid;
+            int otherBid;
             try {
                 ownBid = ownBidder.placeBid();
                 otherBid = otherBidder.placeBid();
@@ -101,8 +106,12 @@ public class Auction implements Runnable {
                 log.error("Auction Round Verification Error: {}", e.getMessage());
                 return;
             }
+
+            BidderContextUpdater.updateBidderContext(context, ownBidder, otherBidder, ownBid, otherBid);
+            log.info("{}", context.getHistory());
         }
 
         log.info("Winner: {}", auctionState.getOwnBidderCurrentQuantityWon() > auctionState.getOtherBidderCurrentQuantityWon() ? "Own" : "Other");
+        log.info("Stats. Own: {} Other: {}", auctionState.getOwnBidderCurrentQuantityWon(), auctionState.getOtherBidderCurrentQuantityWon());
     }
 }

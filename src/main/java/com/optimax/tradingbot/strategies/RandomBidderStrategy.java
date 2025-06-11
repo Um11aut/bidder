@@ -1,5 +1,6 @@
 package com.optimax.tradingbot.strategies;
 
+import com.optimax.tradingbot.bidder.BidderState;
 import org.springframework.lang.NonNull;
 import com.optimax.tradingbot.bidder.BidderStrategy;
 import com.optimax.tradingbot.impl.BidderContext;
@@ -34,16 +35,16 @@ public class RandomBidderStrategy implements BidderStrategy {
 
     @NonNull
     @Override
-    public OptionalInt nextBid(BidderContext ctx) {
+    public OptionalInt nextBid(BidderState own, BidderContext ctx) {
         if (initialQuantity == 0) {
-            initialQuantity = ctx.own().getTotalQuantity();
+            initialQuantity = own.getTotalQuantity();
         }
 
         if (params.maxRounds().isPresent() && round > params.maxRounds().getAsInt()) {
             return OptionalInt.empty();
         }
 
-        int ownCash = ctx.own().getCash();
+        int ownCash = own.getCash();
         if (ownCash <= 0) {
             return OptionalInt.empty();
         }

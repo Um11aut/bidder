@@ -55,7 +55,7 @@ public class AuctionVerifier {
      * @throws AuctionValidatorException if any round rule is violated.
      */
     public void verifyRound(int ownBid, int otherBid) throws AuctionValidatorException {
-        stateUpdater.updateState(auctionState, ownBid, otherBid);
+        stateUpdater.updateAuctionState(auctionState, ownBid, otherBid);
         roundValidators.validate(auctionState);
     }
 

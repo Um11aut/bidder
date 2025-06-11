@@ -35,4 +35,10 @@ public interface Bidder {
      *              the bid of the other bidder
      */
     void bids(int own, int other) throws InvalidParameterException;
+
+    /**
+     *
+     * @return
+     */
+    BidderState getState();
 }
