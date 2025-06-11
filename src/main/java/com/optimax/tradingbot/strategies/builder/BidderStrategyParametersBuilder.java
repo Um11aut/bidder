@@ -5,6 +5,7 @@ import com.optimax.tradingbot.strategies.builder.enums.BidderStrategyGreediness;
 import com.optimax.tradingbot.utils.Pair;
 
 import java.security.InvalidParameterException;
+import java.util.Objects;
 
 /**
  * The Parameters Builder for the BidderStrategy
@@ -70,9 +71,7 @@ public class BidderStrategyParametersBuilder {
         if (riskRewardRatio.getFirst() > riskRewardRatio.getSecond()) {
             throw new InvalidParameterException("Risk cannot be greater than reward");
         }
-        if (greediness == null) {
-            throw new NullPointerException("Greediness is null");
-        }
+        Objects.requireNonNull(greediness);
         return new BidderStrategyParameters(greediness, riskRewardRatio, maxRounds);
     }
 }
