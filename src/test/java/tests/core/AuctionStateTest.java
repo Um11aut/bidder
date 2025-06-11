@@ -28,13 +28,13 @@ class AuctionStateTest {
         assertEquals(INITIAL_CASH, auctionState.getInitialBaseCash(),
                 "Initial base cash should match constructor parameter");
 
-        assertEquals(INITIAL_CASH, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_CASH, auctionState.getOwnBidderCash(),
                 "Own bidder's initial cash should be base cash");
-        assertEquals(INITIAL_CASH, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_CASH, auctionState.getOtherBidderCash(),
                 "Other bidder's initial cash should be base cash");
-        assertEquals(0, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder's initial quantity won should be 0");
-        assertEquals(0, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder's initial quantity won should be 0");
         assertEquals(INITIAL_QUANTITY, auctionState.getRemainingQuantity(),
                 "Remaining quantity should initially be total initial quantity");
@@ -46,9 +46,9 @@ class AuctionStateTest {
         int newCash = 450;
         auctionState.setOwnBidderCurrentCash(newCash);
 
-        assertEquals(newCash, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(newCash, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should be updated to " + newCash);
-        assertEquals(INITIAL_CASH, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_CASH, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should remain unchanged");
     }
 
@@ -58,9 +58,9 @@ class AuctionStateTest {
         int newCash = 300;
         auctionState.setOtherBidderCurrentCash(newCash);
 
-        assertEquals(newCash, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(newCash, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should be updated to " + newCash);
-        assertEquals(INITIAL_CASH, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_CASH, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should remain unchanged");
     }
 
@@ -70,9 +70,9 @@ class AuctionStateTest {
         int newQuantity = 10;
         auctionState.setOwnBidderCurrentQuantityWon(newQuantity);
 
-        assertEquals(newQuantity, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(newQuantity, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder's quantity won should be updated to " + newQuantity);
-        assertEquals(0, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder's quantity won should remain unchanged");
     }
 
@@ -82,9 +82,9 @@ class AuctionStateTest {
         int newQuantity = 15;
         auctionState.setOtherBidderCurrentQuantityWon(newQuantity);
 
-        assertEquals(newQuantity, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(newQuantity, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder's quantity won should be updated to " + newQuantity);
-        assertEquals(0, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder's quantity won should remain unchanged");
     }
 
@@ -113,10 +113,10 @@ class AuctionStateTest {
         auctionState.setOwnBidderCurrentQuantityWon(bid1OwnQuantity);
         auctionState.setRemainingQuantity(bid1Remaining);
 
-        assertEquals(bid1OwnCash, auctionState.getOwnBidderCurrentCash());
-        assertEquals(bid1OtherCash, auctionState.getOtherBidderCurrentCash());
-        assertEquals(bid1OwnQuantity, auctionState.getOwnBidderCurrentQuantityWon());
-        assertEquals(bid1OtherQuantity, auctionState.getOtherBidderCurrentQuantityWon()); // Still 0
+        assertEquals(bid1OwnCash, auctionState.getOwnBidderCash());
+        assertEquals(bid1OtherCash, auctionState.getOtherBidderCash());
+        assertEquals(bid1OwnQuantity, auctionState.getOwnBidderQuantityWon());
+        assertEquals(bid1OtherQuantity, auctionState.getOtherBidderQuantityWon()); // Still 0
         assertEquals(bid1Remaining, auctionState.getRemainingQuantity());
 
         int bid2OwnCash = 480;
@@ -130,10 +130,10 @@ class AuctionStateTest {
         auctionState.setOtherBidderCurrentQuantityWon(bid2OtherQuantity);
         auctionState.setRemainingQuantity(bid2Remaining);
 
-        assertEquals(bid2OwnCash, auctionState.getOwnBidderCurrentCash());
-        assertEquals(bid2OtherCash, auctionState.getOtherBidderCurrentCash());
-        assertEquals(bid1OwnQuantity, auctionState.getOwnBidderCurrentQuantityWon()); // Still 5
-        assertEquals(bid2OtherQuantity, auctionState.getOtherBidderCurrentQuantityWon());
+        assertEquals(bid2OwnCash, auctionState.getOwnBidderCash());
+        assertEquals(bid2OtherCash, auctionState.getOtherBidderCash());
+        assertEquals(bid1OwnQuantity, auctionState.getOwnBidderQuantityWon()); // Still 5
+        assertEquals(bid2OtherQuantity, auctionState.getOtherBidderQuantityWon());
         assertEquals(bid2Remaining, auctionState.getRemainingQuantity());
     }
 }

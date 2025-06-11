@@ -170,8 +170,8 @@ class AuctionTest {
 
         AuctionState finalState = (AuctionState) getPrivateField(auction, "auctionState");
         assertEquals(0, finalState.getRemainingQuantity());
-        assertEquals(6, finalState.getOwnBidderCurrentQuantityWon());
-        assertEquals(4, finalState.getOtherBidderCurrentQuantityWon());
+        assertEquals(6, finalState.getOwnBidderQuantityWon());
+        assertEquals(4, finalState.getOtherBidderQuantityWon());
     }
 
     @Test

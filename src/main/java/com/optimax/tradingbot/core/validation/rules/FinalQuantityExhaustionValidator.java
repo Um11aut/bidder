@@ -16,7 +16,7 @@ public class FinalQuantityExhaustionValidator implements AuctionRuleValidator {
             throw new AuctionValidatorException("Auction did not fully auction all quantity. Remaining: " + state.getRemainingQuantity());
         }
         // Additional check: total quantity won must match initial total quantity
-        if (state.getOwnBidderCurrentQuantityWon() + state.getOtherBidderCurrentQuantityWon() != state.getTotalInitialQuantity()) {
+        if (state.getOwnBidderQuantityWon() + state.getOtherBidderQuantityWon() != state.getTotalInitialQuantity()) {
             throw new AuctionValidatorException("Total quantity won by bidders does not match initial total quantity.");
         }
     }

@@ -22,19 +22,19 @@ public class AuctionState {
     }
 
     // Getters
-    public int getOwnBidderCurrentCash() {
+    public int getOwnBidderCash() {
         return currentCash.getFirst();
     }
 
-    public int getOtherBidderCurrentCash() {
+    public int getOtherBidderCash() {
         return currentCash.getSecond();
     }
 
-    public int getOwnBidderCurrentQuantityWon() {
+    public int getOwnBidderQuantityWon() {
         return quantityWon.getFirst();
     }
 
-    public int getOtherBidderCurrentQuantityWon() {
+    public int getOtherBidderQuantityWon() {
         return quantityWon.getSecond();
     }
 

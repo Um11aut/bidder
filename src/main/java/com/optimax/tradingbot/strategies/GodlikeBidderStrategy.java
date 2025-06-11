@@ -13,7 +13,7 @@ public class GodlikeBidderStrategy implements BidderStrategy {
 
     private BidderStrategyParameters params;
     private int round;
-    private int initialQuantity;
+    private int initialQuantity; // Refers to initial total quantity of items in the auction
     private int initialCash;
     private final Random random;
 
@@ -38,12 +38,9 @@ public class GodlikeBidderStrategy implements BidderStrategy {
     @NonNull
     @Override
     public OptionalInt nextBid(BidderState own, BidderContext ctx) {
-        List<BidderState> otherBidders = ctx.getFilteredStates(own.id());
-
         if (initialQuantity == 0) {
             initialQuantity = own.totalQuantity();
         }
-
         if (initialCash == 0) {
             initialCash = own.cash();
         }
@@ -57,58 +54,38 @@ public class GodlikeBidderStrategy implements BidderStrategy {
             return OptionalInt.empty();
         }
 
-        int halfQtyCap = Math.max(1, (int) (initialQuantity * 0.5) - 1);
+        int bidValue;
+        int opponentLastMaxBid = 0;
 
-        // --- Updated opponent aggression analysis ---
-        double dynamicRisk = getDynamicRisk(own, ctx);
-        double diminishingFactor = 1.0 - ((double) own.getQuantity() / initialQuantity);
-
-        // Estimate expected opponent bid based on average remaining cash
-        double totalOpponentCash = otherBidders.stream().mapToInt(BidderState::cash).sum();
-
-        double expectedOpponentBid = 0;
-        int remainingRounds = params.maxRounds().orElse(100) - round + 1;
-        if (!otherBidders.isEmpty() && remainingRounds > 0) {
-            expectedOpponentBid = (totalOpponentCash / otherBidders.size()) / remainingRounds;
-        }
-
-        double utility = dynamicRisk * diminishingFactor * expectedOpponentBid;
-        double entropy = 0.8 + (random.nextDouble() * 0.4);
-        int calculatedBid = (int) Math.round(Math.min(utility * entropy, ownCash));
-
-        int cappedBid = Math.min(calculatedBid, halfQtyCap);
-        int finalBid = Math.max(1, cappedBid);
-
-        finalBid = Math.min(finalBid, ownCash);
-
-        return OptionalInt.of(finalBid);
-    }
-
-    private double getDynamicRisk(BidderState own, BidderContext ctx) {
-        List<BidderHistoryUnit> history = ctx.getHistory();
-        double opponentAggression = 0.5; // Default aggression
-
-        if (!history.isEmpty()) {
-            double totalHighestOpponentBids = 0;
-            int roundsConsidered = 0;
-
-            for (BidderHistoryUnit roundBids : history) {
-                if (roundBids != null && !roundBids.bids().isEmpty()) {
-                    Optional<Integer> maxBid = roundBids.getMaxBidInRound(own.id());
-                    if (maxBid.isPresent()) {
-                        totalHighestOpponentBids += maxBid.get();
-                        roundsConsidered++;
-                    }
-                }
-            }
-
-            if (roundsConsidered > 0 && initialCash > 0) {
-                opponentAggression = totalHighestOpponentBids / (roundsConsidered * initialCash);
-                opponentAggression = Math.clamp(opponentAggression, 0.1, 1.0);
+        if (!ctx.getHistory().isEmpty()) {
+            // Get the last round's history
+            BidderHistoryUnit lastRound = ctx.getHistory().getLast();
+            Optional<Integer> otherBidOpt = lastRound.getMaxBidInRound(own.id());
+            if (otherBidOpt.isPresent()) {
+                opponentLastMaxBid = otherBidOpt.get();
             }
         }
 
-        return Math.pow(opponentAggression, 0.8) * 0.7 + 0.3;
+        if (opponentLastMaxBid > 0) {
+            // Bid slightly more than the opponent's last highest bid
+            bidValue = Math.min(ownCash, opponentLastMaxBid + 1);
+        } else {
+            // If no history or opponent didn't bid last round, bid aggressively (e.g., 70-80% of cash)
+            bidValue = (int) (ownCash * 0.7 + random.nextInt() * ownCash * 0.1);
+        }
+
+        // Ensure bid is at least 1 and capped by remaining cash
+        bidValue = Math.max(1, bidValue);
+        bidValue = Math.min(bidValue, ownCash);
+
+        // Godlike's max bid per round for quantity. For TOTAL_QUANTITY=10, this is 5.
+        // This is crucial to allow Godlike to bid for one more unit than Balanced's cap (4).
+        int godlikeMaxBidPerRoundQuantityCap = (int) (initialQuantity * 0.5);
+        if (godlikeMaxBidPerRoundQuantityCap == 0) godlikeMaxBidPerRoundQuantityCap = 1;
+
+        bidValue = Math.min(bidValue, godlikeMaxBidPerRoundQuantityCap);
+
+        return OptionalInt.of(bidValue);
     }
 
     @Override

@@ -11,10 +11,10 @@ public class NegativeCashValidator implements AuctionRuleValidator {
 
     @Override
     public void validate(AuctionState state) throws AuctionValidatorException  {
-        if (state.getOwnBidderCurrentCash() < 0) {
+        if (state.getOwnBidderCash() < 0) {
             throw new AuctionValidatorException("Own bidder's cash went below zero.");
         }
-        if (state.getOtherBidderCurrentCash() < 0) {
+        if (state.getOtherBidderCash() < 0) {
             throw new AuctionValidatorException("Other bidder's cash went below zero.");
         }
     }

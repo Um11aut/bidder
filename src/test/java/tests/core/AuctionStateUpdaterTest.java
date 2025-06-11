@@ -40,13 +40,13 @@ class AuctionStateUpdaterTest {
 
         updater.updateAuctionState(auctionState, ownBid, otherBid);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should decrease by own bid");
-        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should decrease by other bid");
-        assertEquals(1, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(1, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder should win 1 quantity");
-        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(1, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder should win 1 quantity");
         assertEquals(INITIAL_TOTAL_QUANTITY - 2, auctionState.getRemainingQuantity(),
                 "Remaining quantity should decrease by 2 (1+1)");
@@ -64,13 +64,13 @@ class AuctionStateUpdaterTest {
 
         updater.updateAuctionState(auctionState, ownBid, otherBid);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should decrease by own bid");
-        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should decrease by other bid");
-        assertEquals(2, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(2, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder should win 2 quantities");
-        assertEquals(0, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder should win 0 quantity");
         assertEquals(INITIAL_TOTAL_QUANTITY - 2, auctionState.getRemainingQuantity(),
                 "Remaining quantity should decrease by 2 (only own won)");
@@ -88,13 +88,13 @@ class AuctionStateUpdaterTest {
 
         updater.updateAuctionState(auctionState, ownBid, otherBid);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should decrease by own bid");
-        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should decrease by other bid");
-        assertEquals(0, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder should win 0 quantity");
-        assertEquals(2, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(2, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder should win 2 quantities");
         assertEquals(INITIAL_TOTAL_QUANTITY - 2, auctionState.getRemainingQuantity(),
                 "Remaining quantity should decrease by 2 (only other won)");
@@ -112,13 +112,13 @@ class AuctionStateUpdaterTest {
 
         updater.updateAuctionState(auctionState, ownBid, otherBid);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should decrease by own bid");
-        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should decrease by other bid");
-        assertEquals(0, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder should win 0 quantity");
-        assertEquals(0, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(0, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder should win 0 quantity");
         assertEquals(INITIAL_TOTAL_QUANTITY, auctionState.getRemainingQuantity(),
                 "Remaining quantity should remain unchanged as no quantity was won");
@@ -134,10 +134,10 @@ class AuctionStateUpdaterTest {
         int otherBid1 = 10;
         updater1.updateAuctionState(auctionState, ownBid1, otherBid1);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid1, auctionState.getOwnBidderCurrentCash());
-        assertEquals(INITIAL_BASE_CASH - otherBid1, auctionState.getOtherBidderCurrentCash());
-        assertEquals(1, auctionState.getOwnBidderCurrentQuantityWon());
-        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon());
+        assertEquals(INITIAL_BASE_CASH - ownBid1, auctionState.getOwnBidderCash());
+        assertEquals(INITIAL_BASE_CASH - otherBid1, auctionState.getOtherBidderCash());
+        assertEquals(1, auctionState.getOwnBidderQuantityWon());
+        assertEquals(1, auctionState.getOtherBidderQuantityWon());
         assertEquals(INITIAL_TOTAL_QUANTITY - 2, auctionState.getRemainingQuantity());
 
         BidderWinEvaluator round2OwnWinEvaluator = new TestBidderWinEvaluator(2);
@@ -147,13 +147,13 @@ class AuctionStateUpdaterTest {
         int otherBid2 = 8;
         updater2.updateAuctionState(auctionState, ownBid2, otherBid2);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should be cumulative");
-        assertEquals(INITIAL_BASE_CASH - otherBid1 - otherBid2, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - otherBid1 - otherBid2, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should be cumulative");
-        assertEquals(1 + 2, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(1 + 2, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder's quantity won should be cumulative (1+2)");
-        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(1, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder's quantity won should be cumulative (1+0)");
         assertEquals(INITIAL_TOTAL_QUANTITY - 2 - 2, auctionState.getRemainingQuantity(),
                 "Remaining quantity should be cumulative (100-2-2)");
@@ -165,13 +165,13 @@ class AuctionStateUpdaterTest {
         int otherBid3 = 3;
         updater3.updateAuctionState(auctionState, ownBid3, otherBid3);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2 - ownBid3, auctionState.getOwnBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2 - ownBid3, auctionState.getOwnBidderCash(),
                 "Own bidder's cash should be cumulative after 3 rounds");
-        assertEquals(INITIAL_BASE_CASH - otherBid1 - otherBid2 - otherBid3, auctionState.getOtherBidderCurrentCash(),
+        assertEquals(INITIAL_BASE_CASH - otherBid1 - otherBid2 - otherBid3, auctionState.getOtherBidderCash(),
                 "Other bidder's cash should be cumulative after 3 rounds");
-        assertEquals(3, auctionState.getOwnBidderCurrentQuantityWon(),
+        assertEquals(3, auctionState.getOwnBidderQuantityWon(),
                 "Own bidder's quantity won remains 3");
-        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(1, auctionState.getOtherBidderQuantityWon(),
                 "Other bidder's quantity won remains 1");
         assertEquals(INITIAL_TOTAL_QUANTITY - 4, auctionState.getRemainingQuantity(),
                 "Remaining quantity remains " + (INITIAL_TOTAL_QUANTITY - 4));

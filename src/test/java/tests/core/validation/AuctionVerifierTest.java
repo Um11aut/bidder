@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class AuctionVerifierTest {
+class AuctionVerifierTest {
     private static final int INITIAL_TOTAL_QUANTITY = 100;
     private static final int INITIAL_BASE_CASH = 500;
     private AuctionState auctionState;
@@ -91,10 +91,10 @@ public class AuctionVerifierTest {
         assertNotNull(verifier, "AuctionVerifier should be initialized with custom evaluators");
         try {
             verifier.verifyRound(10, 5);
-            assertEquals(INITIAL_BASE_CASH - 10, auctionState.getOwnBidderCurrentCash());
-            assertEquals(INITIAL_BASE_CASH - 5, auctionState.getOtherBidderCurrentCash());
-            assertEquals(1, auctionState.getOwnBidderCurrentQuantityWon());
-            assertEquals(0, auctionState.getOtherBidderCurrentQuantityWon());
+            assertEquals(INITIAL_BASE_CASH - 10, auctionState.getOwnBidderCash());
+            assertEquals(INITIAL_BASE_CASH - 5, auctionState.getOtherBidderCash());
+            assertEquals(1, auctionState.getOwnBidderQuantityWon());
+            assertEquals(0, auctionState.getOtherBidderQuantityWon());
             assertEquals(INITIAL_TOTAL_QUANTITY - 1, auctionState.getRemainingQuantity());
         } catch (AuctionValidatorException e) {
             fail("No exception expected for successful round validation: " + e.getMessage());
@@ -118,10 +118,10 @@ public class AuctionVerifierTest {
 
         verifier.verifyRound(ownBid, otherBid);
 
-        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash());
-        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCurrentCash());
-        assertEquals(1, auctionState.getOwnBidderCurrentQuantityWon());
-        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon());
+        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCash());
+        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCash());
+        assertEquals(1, auctionState.getOwnBidderQuantityWon());
+        assertEquals(1, auctionState.getOtherBidderQuantityWon());
         assertEquals(INITIAL_TOTAL_QUANTITY - 2, auctionState.getRemainingQuantity());
 
         assertTrue(singleRoundValidator.hasValidateBeenCalled(), "Round validator's validate method should have been called");
@@ -149,10 +149,10 @@ public class AuctionVerifierTest {
 
         assertEquals(expectedErrorMessage, thrown.getMessage(), "Exception message should match");
 
-        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCurrentCash());
-        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCurrentCash());
-        assertEquals(0, auctionState.getOwnBidderCurrentQuantityWon());
-        assertEquals(0, auctionState.getOtherBidderCurrentQuantityWon());
+        assertEquals(INITIAL_BASE_CASH - ownBid, auctionState.getOwnBidderCash());
+        assertEquals(INITIAL_BASE_CASH - otherBid, auctionState.getOtherBidderCash());
+        assertEquals(0, auctionState.getOwnBidderQuantityWon());
+        assertEquals(0, auctionState.getOtherBidderQuantityWon());
         assertEquals(INITIAL_TOTAL_QUANTITY, auctionState.getRemainingQuantity());
 
         assertTrue(failingRoundValidator.hasValidateBeenCalled(), "shouldn't happen");
@@ -202,7 +202,6 @@ public class AuctionVerifierTest {
         CompositeAuctionValidator finalValidator = new CompositeAuctionValidator(List.of(finalValidatorRule));
 
         BidderWinEvaluator ownWinEvaluator = new TestBidderWinEvaluator(1);
-        BidderWinEvaluator otherWinEvaluator = new TestBidderWinEvaluator(0);
         BidderWinEvaluator bothWinEvaluator = new TestBidderWinEvaluator(1);
 
         AuctionVerifier verifier = new AuctionVerifier(auctionState, roundValidator, finalValidator,
@@ -217,10 +216,10 @@ public class AuctionVerifierTest {
         roundValidatorRule1.resetValidationCallStatus();
         roundValidatorRule2.resetValidationCallStatus();
 
-        assertEquals(INITIAL_BASE_CASH - ownBid1, auctionState.getOwnBidderCurrentCash());
-        assertEquals(INITIAL_BASE_CASH - otherBid1, auctionState.getOtherBidderCurrentCash());
-        assertEquals(1, auctionState.getOwnBidderCurrentQuantityWon());
-        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon());
+        assertEquals(INITIAL_BASE_CASH - ownBid1, auctionState.getOwnBidderCash());
+        assertEquals(INITIAL_BASE_CASH - otherBid1, auctionState.getOtherBidderCash());
+        assertEquals(1, auctionState.getOwnBidderQuantityWon());
+        assertEquals(1, auctionState.getOtherBidderQuantityWon());
         assertEquals(INITIAL_TOTAL_QUANTITY - 2, auctionState.getRemainingQuantity());
 
         // Round 2
@@ -230,10 +229,10 @@ public class AuctionVerifierTest {
         assertTrue(roundValidatorRule1.hasValidateBeenCalled());
         assertTrue(roundValidatorRule2.hasValidateBeenCalled());
 
-        assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2, auctionState.getOwnBidderCurrentCash());
-        assertEquals(INITIAL_BASE_CASH - otherBid1 - otherBid2, auctionState.getOtherBidderCurrentCash());
-        assertEquals(2, auctionState.getOwnBidderCurrentQuantityWon());
-        assertEquals(2, auctionState.getOtherBidderCurrentQuantityWon());
+        assertEquals(INITIAL_BASE_CASH - ownBid1 - ownBid2, auctionState.getOwnBidderCash());
+        assertEquals(INITIAL_BASE_CASH - otherBid1 - otherBid2, auctionState.getOtherBidderCash());
+        assertEquals(2, auctionState.getOwnBidderQuantityWon());
+        assertEquals(2, auctionState.getOtherBidderQuantityWon());
         assertEquals(INITIAL_TOTAL_QUANTITY - 4, auctionState.getRemainingQuantity());
 
         // Final verification

@@ -20,15 +20,15 @@ public record AuctionStateUpdater(BidderWinEvaluator ownWinEvaluator, BidderWinE
         int otherWonQuantity = otherWinEvaluator.evaluateWonQuantity(otherBid, ownBid);
 
         // Update quantities won
-        state.setOwnBidderCurrentQuantityWon(state.getOwnBidderCurrentQuantityWon() + ownWonQuantity);
-        state.setOtherBidderCurrentQuantityWon(state.getOtherBidderCurrentQuantityWon() + otherWonQuantity);
+        state.setOwnBidderCurrentQuantityWon(state.getOwnBidderQuantityWon() + ownWonQuantity);
+        state.setOtherBidderCurrentQuantityWon(state.getOtherBidderQuantityWon() + otherWonQuantity);
 
         // Update remaining quantity
         // Note: Assumes that the sum of possible quantity is always the same as the auctioned amount
         state.setRemainingQuantity(state.getRemainingQuantity() - (ownWonQuantity + otherWonQuantity));
 
         // Update cash
-        state.setOwnBidderCurrentCash(state.getOwnBidderCurrentCash() - ownBid);
-        state.setOtherBidderCurrentCash(state.getOtherBidderCurrentCash() - otherBid);
+        state.setOwnBidderCurrentCash(state.getOwnBidderCash() - ownBid);
+        state.setOtherBidderCurrentCash(state.getOtherBidderCash() - otherBid);
     }
 }

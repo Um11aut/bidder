@@ -110,7 +110,7 @@ public class Auction implements Runnable {
      *
      * @param iterations number of rounds to execute (typically maxRounds)
      */
-    void auctionLoop(int iterations) {
+    private void auctionLoop(int iterations) {
         for (int i = 0; i < iterations; i++) {
             int ownBid;
             int otherBid;
@@ -147,7 +147,7 @@ public class Auction implements Runnable {
         }
 
         // Log final auction results and declare the winner
-        log.info("Winner: {}", auctionState.getOwnBidderCurrentQuantityWon() > auctionState.getOtherBidderCurrentQuantityWon() ? "Own" : "Other");
-        log.info("Stats. Own: {} Other: {}", auctionState.getOwnBidderCurrentQuantityWon(), auctionState.getOtherBidderCurrentQuantityWon());
+        log.info("Winner: {}", auctionState.getOwnBidderQuantityWon() > auctionState.getOtherBidderQuantityWon() ? "Own" : "Other");
+        log.info("Stats. Own: {} Other: {}", auctionState.getOwnBidderQuantityWon(), auctionState.getOtherBidderQuantityWon());
     }
 }
