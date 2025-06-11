@@ -5,10 +5,11 @@ import com.optimax.tradingbot.bidder.BidderWinEvaluator;
 import java.security.InvalidParameterException;
 
 public class DefaultBidderWinEvaluator implements BidderWinEvaluator {
+
     /**
      * Desired default win algorithm
      * If own bid more MU than other, own won more 2 QU
-     * In a tie get 1
+     * In a tie own gets 1
      */
     @Override
     public int evaluateWonQuantity(int own, int other) throws InvalidParameterException {

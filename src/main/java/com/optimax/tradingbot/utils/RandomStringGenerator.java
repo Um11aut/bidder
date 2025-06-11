@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class RandomStringGenerator {
+
     RandomStringGenerator() {
     }
 

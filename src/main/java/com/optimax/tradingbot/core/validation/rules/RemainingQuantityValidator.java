@@ -8,6 +8,7 @@ import com.optimax.tradingbot.exceptions.AuctionValidatorException;
  * Validates that the remaining quantity does not go below zero during a round.
  */
 public class RemainingQuantityValidator implements AuctionRuleValidator {
+
     @Override
     public void validate(AuctionState state) throws AuctionValidatorException {
         if (state.getRemainingQuantity() < 0) {

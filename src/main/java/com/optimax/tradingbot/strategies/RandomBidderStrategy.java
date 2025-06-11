@@ -10,6 +10,7 @@ import java.util.OptionalInt;
 import java.util.Random;
 
 public class RandomBidderStrategy implements BidderStrategy {
+
     private BidderStrategyParameters params;
     private int round;
     private int initialQuantity;

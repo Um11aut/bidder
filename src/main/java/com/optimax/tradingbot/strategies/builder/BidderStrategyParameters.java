@@ -11,6 +11,7 @@ import java.util.OptionalInt;
  * Includes greediness, risk-to-reward ratio and maximum rounds
  */
 public final class BidderStrategyParameters {
+
     private final BidderStrategyGreediness greediness;
     private final Pair<Integer, Integer> riskRewardRatio;
     private final int maxRounds;

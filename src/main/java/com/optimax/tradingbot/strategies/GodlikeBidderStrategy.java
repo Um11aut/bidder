@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import java.util.*;
 
 public class GodlikeBidderStrategy implements BidderStrategy {
+
     private BidderStrategyParameters params;
     private int round;
     private int initialQuantity;

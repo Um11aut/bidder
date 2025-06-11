@@ -6,16 +6,25 @@ import com.optimax.tradingbot.strategies.builder.BidderStrategyParameters;
 
 import java.util.OptionalInt;
 
+/**
+ * Strategy for which the bidder chooses
+ */
 public interface BidderStrategy {
+
     /**
      * @param params
-     *              Unified parameters for the strategy
+     *              Unified algorithm parameters for the strategy
      */
     void init(@NonNull BidderStrategyParameters params);
 
     /**
+     * Pull next bid from the strategy
+     * @param own
+     *           The POV BidderState
+     * @param ctx
+     *           Shared between bidders context
      * @return
-     *        empty if no bid possible, otherwise finite amount of cash to be sacrificed
+     *           empty if no bid possible, otherwise finite amount of cash to be sacrificed
      */
     OptionalInt nextBid(BidderState own, BidderContext ctx);
 

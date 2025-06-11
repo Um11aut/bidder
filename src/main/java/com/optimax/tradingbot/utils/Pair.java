@@ -1,6 +1,7 @@
 package com.optimax.tradingbot.utils;
 
 public class Pair<K, V> {
+
     private K first;
     private V second;
 

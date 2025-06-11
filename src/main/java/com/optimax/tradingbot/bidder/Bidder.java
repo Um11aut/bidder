@@ -8,6 +8,7 @@ import com.optimax.tradingbot.exceptions.InternalStrategyException;
  * Represents a bidder for the action.
  */
 public interface Bidder {
+
     /**
      * Initializes the bidder with the production quantity and the allowed cash
      * limit.

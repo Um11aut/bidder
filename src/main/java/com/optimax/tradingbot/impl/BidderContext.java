@@ -10,6 +10,7 @@ import java.util.*;
  * Contains the all party states and history.
  */
 public final class BidderContext {
+
     private final Map<String, BidderState> states;
     private final List<BidderHistoryUnit> history;
 

@@ -10,6 +10,7 @@ import com.optimax.tradingbot.impl.DefaultBidderWinEvaluator;
  * Verifies the bid data from the rounds
  */
 public class AuctionVerifier {
+
     private final AuctionStateUpdater stateUpdater;
     private CompositeAuctionValidator roundValidators;
     private CompositeAuctionValidator finalValidators;

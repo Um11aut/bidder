@@ -8,6 +8,7 @@ import java.security.InvalidParameterException;
  * Default bidder state
  */
 public class BidderStateImpl implements BidderState {
+
     private final int totalQuantity;
 
     private int quantity;

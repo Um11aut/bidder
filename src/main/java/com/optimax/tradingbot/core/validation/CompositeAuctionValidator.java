@@ -10,8 +10,9 @@ import java.util.List;
  * A composite validator that aggregates multiple AuctionRuleValidators.
  */
 public record CompositeAuctionValidator(List<AuctionRuleValidator> validators) implements AuctionRuleValidator {
+
     public CompositeAuctionValidator(List<AuctionRuleValidator> validators) {
-        this.validators = new ArrayList<>(validators); // Defensive copy
+        this.validators = new ArrayList<>(validators); // Defensive copy to avoid outer reference modifications
     }
 
     @Override

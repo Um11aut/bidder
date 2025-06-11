@@ -6,6 +6,7 @@ import com.optimax.tradingbot.utils.Pair;
  * Represents the current state of the auction at any given point.
  */
 public class AuctionState {
+
     private Pair<Integer, Integer> currentCash;          // (ownBidderCash, otherBidderCash)
     private Pair<Integer, Integer> quantityWon;          // (ownBidderQuantityWon, otherBidderQuantityWon)
     private int remainingQuantity;

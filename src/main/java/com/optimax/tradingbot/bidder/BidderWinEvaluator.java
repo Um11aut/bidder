@@ -8,6 +8,7 @@ import java.security.InvalidParameterException;
  */
 @FunctionalInterface
 public interface BidderWinEvaluator {
+
     /**
      * Calculate the won quantity based on some finite algorithm
      * @param own

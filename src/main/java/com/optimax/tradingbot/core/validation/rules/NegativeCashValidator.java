@@ -8,6 +8,7 @@ import com.optimax.tradingbot.exceptions.AuctionValidatorException;
  * Validates that no bidder's cash goes below zero.
  */
 public class NegativeCashValidator implements AuctionRuleValidator {
+
     @Override
     public void validate(AuctionState state) throws AuctionValidatorException  {
         if (state.getOwnBidderCurrentCash() < 0) {

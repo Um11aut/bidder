@@ -8,6 +8,7 @@ import com.optimax.tradingbot.exceptions.AuctionValidatorException;
  */
 @FunctionalInterface
 public interface AuctionRuleValidator {
+
     /**
      * Validates a specific rule against the current auction state.
      * @param state The current auction state.

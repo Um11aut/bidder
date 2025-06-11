@@ -10,6 +10,7 @@ import com.optimax.tradingbot.utils.Pair;
 import java.util.OptionalInt;
 
 public class BalancedBidderStrategy implements BidderStrategy {
+
     private BidderStrategyParameters params;
     private int round;
     private int initialQuantity;

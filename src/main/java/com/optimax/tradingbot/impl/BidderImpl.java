@@ -14,6 +14,7 @@ import com.optimax.tradingbot.bidder.BidderStrategy;
  * The default implementation of Bidder interface
  */
 public class BidderImpl implements Bidder {
+
     private final BidderStrategy strategy;
     private final BidderWinEvaluator winnerEvaluator;
     private String ownId;

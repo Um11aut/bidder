@@ -8,6 +8,7 @@ import com.optimax.tradingbot.exceptions.AuctionValidatorException;
  * Validates the final state of the auction, ensuring all quantity has been auctioned.
  */
 public class FinalQuantityExhaustionValidator implements AuctionRuleValidator {
+
     @Override
     public void validate(AuctionState state) throws AuctionValidatorException  {
         // Rule: Bidding on each 2 QU is repeated until the supply of x QU is fully auctioned.

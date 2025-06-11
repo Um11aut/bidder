@@ -10,6 +10,7 @@ import java.security.InvalidParameterException;
  * The Parameters Builder for the BidderStrategy
  */
 public class BidderStrategyParametersBuilder {
+
     private BidderStrategyGreediness greediness = BidderStrategyGreediness.MEDIUM;
     private Pair<Integer, Integer> riskRewardRatio = new Pair<>(1,1);
     private int maxRounds = 0;

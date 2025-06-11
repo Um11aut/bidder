@@ -6,6 +6,7 @@ import com.optimax.tradingbot.bidder.BidderWinEvaluator;
  * Responsible for updating the auction state based on the bids placed in a round.
  */
 public record AuctionStateUpdater(BidderWinEvaluator ownWinEvaluator, BidderWinEvaluator otherWinEvaluator) {
+
     /**
      * Updates the given auction state based on the current bids.
      *
