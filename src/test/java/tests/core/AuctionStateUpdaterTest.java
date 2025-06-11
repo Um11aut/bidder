@@ -153,7 +153,7 @@ class AuctionStateUpdaterTest {
                 "Other bidder's cash should be cumulative");
         assertEquals(1 + 2, auctionState.getOwnBidderCurrentQuantityWon(),
                 "Own bidder's quantity won should be cumulative (1+2)");
-        assertEquals(1 + 0, auctionState.getOtherBidderCurrentQuantityWon(),
+        assertEquals(1, auctionState.getOtherBidderCurrentQuantityWon(),
                 "Other bidder's quantity won should be cumulative (1+0)");
         assertEquals(INITIAL_TOTAL_QUANTITY - 2 - 2, auctionState.getRemainingQuantity(),
                 "Remaining quantity should be cumulative (100-2-2)");

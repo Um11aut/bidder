@@ -37,8 +37,8 @@ public interface Bidder {
     void bids(int own, int other) throws InvalidParameterException;
 
     /**
-     *
      * @return
+     *        The BidderState indicating current state of the bidder
      */
     BidderState getState();
 }

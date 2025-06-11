@@ -12,7 +12,7 @@ public class BidderStateImpl implements BidderState {
 
     private int quantity;
     private int cash;
-    private String id;
+    private final String id;
 
     /**
      * @param initialQty  The initial Quantity of product provided by default
