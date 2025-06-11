@@ -7,13 +7,13 @@ import com.optimax.tradingbot.strategies.builder.BidderStrategyParameters;
 import java.util.OptionalInt;
 
 /**
- * Strategy for which the bidder chooses
+ * The Strategy for bidding
  */
 public interface BidderStrategy {
 
     /**
      * @param params
-     *              Unified algorithm parameters for the strategy
+     *              Unified parameters for the strategy
      */
     void init(@NonNull BidderStrategyParameters params);
 
@@ -22,7 +22,7 @@ public interface BidderStrategy {
      * @param own
      *           The POV BidderState
      * @param ctx
-     *           Shared between bidders context
+     *           The shared between bidders context
      * @return
      *           empty if no bid possible, otherwise finite amount of cash to be sacrificed
      */
@@ -30,6 +30,7 @@ public interface BidderStrategy {
 
     /**
      * Finish the round after all the bids done
+     * Needed if we have more than one bid per round
      */
     default void finishRound() {
     }

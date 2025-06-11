@@ -38,21 +38,21 @@ public class GodlikeBidderStrategy implements BidderStrategy {
     @NonNull
     @Override
     public OptionalInt nextBid(BidderState own, BidderContext ctx) {
-        List<BidderState> otherBidders = ctx.getFilteredStates(own.getId());
+        List<BidderState> otherBidders = ctx.getFilteredStates(own.id());
 
         if (initialQuantity == 0) {
-            initialQuantity = own.getTotalQuantity();
+            initialQuantity = own.totalQuantity();
         }
 
         if (initialCash == 0) {
-            initialCash = own.getCash();
+            initialCash = own.cash();
         }
 
         if (params.maxRounds().isPresent() && round > params.maxRounds().getAsInt()) {
             return OptionalInt.empty();
         }
 
-        int ownCash = own.getCash();
+        int ownCash = own.cash();
         if (ownCash <= 0) {
             return OptionalInt.empty();
         }
@@ -64,7 +64,7 @@ public class GodlikeBidderStrategy implements BidderStrategy {
         double diminishingFactor = 1.0 - ((double) own.getQuantity() / initialQuantity);
 
         // Estimate expected opponent bid based on average remaining cash
-        double totalOpponentCash = otherBidders.stream().mapToInt(BidderState::getCash).sum();
+        double totalOpponentCash = otherBidders.stream().mapToInt(BidderState::cash).sum();
 
         double expectedOpponentBid = 0;
         int remainingRounds = params.maxRounds().orElse(100) - round + 1;
@@ -94,7 +94,7 @@ public class GodlikeBidderStrategy implements BidderStrategy {
 
             for (BidderHistoryUnit roundBids : history) {
                 if (roundBids != null && !roundBids.bids().isEmpty()) {
-                    Optional<Integer> maxBid = roundBids.getMaxBidInRound(own.getId());
+                    Optional<Integer> maxBid = roundBids.getMaxBidInRound(own.id());
                     if (maxBid.isPresent()) {
                         totalHighestOpponentBids += maxBid.get();
                         roundsConsidered++;

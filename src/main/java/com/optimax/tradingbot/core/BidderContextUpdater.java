@@ -23,8 +23,8 @@ public class BidderContextUpdater {
         ctx.putState(ownBidder.getState());
         ctx.putState(otherBidder.getState());
 
-        map.put(ownBidder.getState().getId(), ownBid);
-        map.put(otherBidder.getState().getId(), otherBid);
+        map.put(ownBidder.getState().id(), ownBid);
+        map.put(otherBidder.getState().id(), otherBid);
 
         ctx.addHistoryUnit(new BidderHistoryUnit(map));
     }

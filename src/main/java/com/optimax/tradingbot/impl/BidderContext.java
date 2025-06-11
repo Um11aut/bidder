@@ -20,7 +20,7 @@ public final class BidderContext {
     }
 
     public void putState(@NonNull BidderState state) {
-        states.put(state.getId(), state);
+        states.put(state.id(), state);
     }
 
     public void addHistoryUnit(@NonNull BidderHistoryUnit unit) {

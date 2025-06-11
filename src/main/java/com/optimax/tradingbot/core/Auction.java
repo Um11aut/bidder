@@ -135,7 +135,7 @@ public class Auction implements Runnable {
             log.debug("Bidding: {} against {}", ownBid, otherBid);
 
             try {
-                // Validate round integrity (e.g., no negative cash, valid quantities)
+                // Validate round
                 verifier.verifyRound(ownBid, otherBid);
             } catch (AuctionValidatorException e) {
                 log.error("Auction Round Verification Error: {}", e.getMessage());

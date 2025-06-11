@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AuctionStateTest {
+class AuctionStateTest {
     private static final int INITIAL_QUANTITY = 100;
     private static final int INITIAL_CASH = 500;
     private AuctionState auctionState;

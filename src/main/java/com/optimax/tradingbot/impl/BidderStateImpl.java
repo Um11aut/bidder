@@ -46,7 +46,7 @@ public class BidderStateImpl implements BidderState {
         quantity += qty;
     }
 
-    public String getId() {
+    public String id() {
         return id;
     }
 
@@ -60,7 +60,7 @@ public class BidderStateImpl implements BidderState {
     /**
      * @return Initial Total Quantity
      */
-    public int getTotalQuantity() {
+    public int totalQuantity() {
         return totalQuantity;
     }
 
@@ -71,7 +71,7 @@ public class BidderStateImpl implements BidderState {
     /**
      * @return cash left
      */
-    public int getCash() {
+    public int cash() {
         return cash;
     }
 }

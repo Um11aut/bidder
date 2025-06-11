@@ -1,6 +1,7 @@
 package tests.core;
 
 import com.optimax.tradingbot.bidder.Bidder;
+import com.optimax.tradingbot.bidder.BidderState;
 import com.optimax.tradingbot.bidder.BidderStrategy;
 import com.optimax.tradingbot.bidder.BidderWinEvaluator;
 import com.optimax.tradingbot.core.Auction;
@@ -8,6 +9,7 @@ import com.optimax.tradingbot.core.AuctionState;
 import com.optimax.tradingbot.core.validation.AuctionVerifier;
 import com.optimax.tradingbot.exceptions.AuctionValidatorException;
 import com.optimax.tradingbot.exceptions.InternalStrategyException;
+import com.optimax.tradingbot.impl.BidderContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -100,25 +102,32 @@ class AuctionTest {
 
         setPrivateField(auction, "ownBidder", mockOwnBidder);
         setPrivateField(auction, "otherBidder", mockOtherBidder);
+        setPrivateField(auction, "context", new BidderContext());
 
         AuctionVerifier spiedVerifier = spy((AuctionVerifier) getPrivateField(auction, "verifier"));
         setPrivateField(auction, "verifier", spiedVerifier);
 
+        BidderState ownState = mock(BidderState.class);
+        when(ownState.id()).thenReturn("own");
+        when(mockOwnBidder.getState()).thenReturn(ownState);
+
+        BidderState otherState = mock(BidderState.class);
+        when(otherState.id()).thenReturn("opponent");
+        when(mockOtherBidder.getState()).thenReturn(otherState);
+
         when(mockOwnBidder.placeBid()).thenReturn(10, 10);
         when(mockOtherBidder.placeBid()).thenReturn(5, 5);
 
-        // Even in C++ u can make private functions public for the tests...
         invokeAuctionLoop(auction, totalQuantity / 2);
 
         verify(mockOwnBidder, times(totalQuantity / 2)).placeBid();
         verify(mockOtherBidder, times(totalQuantity / 2)).placeBid();
 
-        // Verify bids is called for each bidder for each round
         verify(mockOwnBidder, times(totalQuantity / 2)).bids(anyInt(), anyInt());
         verify(mockOtherBidder, times(totalQuantity / 2)).bids(anyInt(), anyInt());
 
-        // Verify verifyRound is called for each round
         verify(spiedVerifier, times(totalQuantity / 2)).verifyRound(anyInt(), anyInt());
+
         AuctionState finalState = (AuctionState) getPrivateField(auction, "auctionState");
         assertEquals(0, finalState.getRemainingQuantity());
     }
@@ -130,12 +139,22 @@ class AuctionTest {
         int baseCash = 100;
 
         Auction auction = new Auction(totalQuantity, baseCash, mockOwnStrategy, mockOpponentStrategy);
+
         setPrivateField(auction, "ownBidder", mockOwnBidder);
         setPrivateField(auction, "otherBidder", mockOtherBidder);
+        setPrivateField(auction, "context", new BidderContext());
+
         AuctionVerifier spiedVerifier = spy((AuctionVerifier) getPrivateField(auction, "verifier"));
         setPrivateField(auction, "verifier", spiedVerifier);
 
-        // Bids Round 1 (10, 5), Round 2 (0, 0)
+        BidderState ownState = mock(BidderState.class);
+        when(ownState.id()).thenReturn("own");
+        when(mockOwnBidder.getState()).thenReturn(ownState);
+
+        BidderState otherState = mock(BidderState.class);
+        when(otherState.id()).thenReturn("opponent");
+        when(mockOtherBidder.getState()).thenReturn(otherState);
+
         when(mockOwnBidder.placeBid()).thenReturn(10, 0);
         when(mockOtherBidder.placeBid()).thenReturn(5, 0);
 
@@ -241,16 +260,25 @@ class AuctionTest {
 
         setPrivateField(spiedAuction, "ownBidder", mockOwnBidder);
         setPrivateField(spiedAuction, "otherBidder", mockOtherBidder);
+        setPrivateField(spiedAuction, "context", new BidderContext());
 
         when(mockOwnBidder.placeBid()).thenReturn(10, 10);
         when(mockOtherBidder.placeBid()).thenReturn(5, 5);
 
+        BidderState ownState = mock(BidderState.class);
+        when(ownState.id()).thenReturn("own");
+        when(mockOwnBidder.getState()).thenReturn(ownState);
+
+        BidderState otherState = mock(BidderState.class);
+        when(otherState.id()).thenReturn("opponent");
+        when(mockOtherBidder.getState()).thenReturn(otherState);
+
         AuctionVerifier spiedVerifier = spy((AuctionVerifier) getPrivateField(auction, "verifier"));
-        setPrivateField(spiedAuction, "verifier", spiedVerifier); // Inject the spied verifier back into the spied Auction
+        setPrivateField(spiedAuction, "verifier", spiedVerifier); // Inject the spied verifier
 
         spiedAuction.run();
-        this.invokeAuctionLoop(verify(spiedAuction, times(1)), totalQuantity / 2);
 
+        this.invokeAuctionLoop(verify(spiedAuction, times(1)), totalQuantity / 2);
         verify(spiedVerifier, times(1)).verifyFinalState();
     }
 
@@ -265,9 +293,18 @@ class AuctionTest {
 
         setPrivateField(spiedAuction, "ownBidder", mockOwnBidder);
         setPrivateField(spiedAuction, "otherBidder", mockOtherBidder);
+        setPrivateField(spiedAuction, "context", new BidderContext());
 
         when(mockOwnBidder.placeBid()).thenReturn(10, 10);
         when(mockOtherBidder.placeBid()).thenReturn(5, 5);
+
+        BidderState ownState = mock(BidderState.class);
+        when(ownState.id()).thenReturn("own");
+        when(mockOwnBidder.getState()).thenReturn(ownState);
+
+        BidderState otherState = mock(BidderState.class);
+        when(otherState.id()).thenReturn("opponent");
+        when(mockOtherBidder.getState()).thenReturn(otherState);
 
         AuctionVerifier spiedVerifier = spy((AuctionVerifier) getPrivateField(auction, "verifier"));
         setPrivateField(spiedAuction, "verifier", spiedVerifier);

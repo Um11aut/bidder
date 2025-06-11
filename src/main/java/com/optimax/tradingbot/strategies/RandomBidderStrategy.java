@@ -38,14 +38,14 @@ public class RandomBidderStrategy implements BidderStrategy {
     @Override
     public OptionalInt nextBid(BidderState own, BidderContext ctx) {
         if (initialQuantity == 0) {
-            initialQuantity = own.getTotalQuantity();
+            initialQuantity = own.totalQuantity();
         }
 
         if (params.maxRounds().isPresent() && round > params.maxRounds().getAsInt()) {
             return OptionalInt.empty();
         }
 
-        int ownCash = own.getCash();
+        int ownCash = own.cash();
         if (ownCash <= 0) {
             return OptionalInt.empty();
         }

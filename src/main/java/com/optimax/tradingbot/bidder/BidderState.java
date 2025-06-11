@@ -20,7 +20,7 @@ public interface BidderState {
      * @return
      *          the current cash balance of the bidder
      */
-    int getCash();
+    int cash();
 
     /**
      * Returns the unique identifier of the bidder.
@@ -28,7 +28,7 @@ public interface BidderState {
      * @return
      *          the identifier string assigned to this bidder
      */
-    String getId();
+    String id();
 
     /**
      * Returns the initial total quantity allocated to the bidder at the start.
@@ -36,5 +36,5 @@ public interface BidderState {
      * @return
      *          the original total quantity assigned to the bidder
      */
-    int getTotalQuantity();
+    int totalQuantity();
 }

@@ -30,7 +30,7 @@ public class BalancedBidderStrategy implements BidderStrategy {
     @Override
     public OptionalInt nextBid(BidderState own, BidderContext ctx) {
         if (initialQuantity == 0) {
-            initialQuantity = own.getTotalQuantity();
+            initialQuantity = own.totalQuantity();
         }
 
         OptionalInt maxRounds = params.maxRounds();
@@ -48,7 +48,7 @@ public class BalancedBidderStrategy implements BidderStrategy {
         int riskRatio = riskRewardRatio.getFirst();
         int rewardRatio = riskRewardRatio.getSecond();
 
-        int ownCash = own.getCash();
+        int ownCash = own.cash();
         if (riskRatio + rewardRatio == 0 || ownCash <= 0) {
             return OptionalInt.empty();
         }
