@@ -256,7 +256,7 @@ class AuctionTest {
         int baseCash = 100;
 
         Auction auction = new Auction(totalQuantity, baseCash, mockOwnStrategy, mockOpponentStrategy);
-        Auction spiedAuction = spy(auction);
+        Auction spiedAuction = spy(auction); // Still spy to check public method calls if needed
 
         setPrivateField(spiedAuction, "ownBidder", mockOwnBidder);
         setPrivateField(spiedAuction, "otherBidder", mockOtherBidder);
@@ -278,7 +278,16 @@ class AuctionTest {
 
         spiedAuction.run();
 
-        this.invokeAuctionLoop(verify(spiedAuction, times(1)), totalQuantity / 2);
+        // Instead of trying to verify auctionLoop directly (which is private),
+        // verify the actions that auctionLoop performs.
+        // These verifications confirm that the auctionLoop logic ran for the expected rounds.
+        verify(mockOwnBidder, times(totalQuantity / 2)).placeBid();
+        verify(mockOtherBidder, times(totalQuantity / 2)).placeBid();
+        verify(mockOwnBidder, times(totalQuantity / 2)).bids(anyInt(), anyInt());
+        verify(mockOtherBidder, times(totalQuantity / 2)).bids(anyInt(), anyInt());
+        verify(spiedVerifier, times(totalQuantity / 2)).verifyRound(anyInt(), anyInt());
+
+        // Now, verify that verifyFinalState was called.
         verify(spiedVerifier, times(1)).verifyFinalState();
     }
 
@@ -309,11 +318,19 @@ class AuctionTest {
         AuctionVerifier spiedVerifier = spy((AuctionVerifier) getPrivateField(auction, "verifier"));
         setPrivateField(spiedAuction, "verifier", spiedVerifier);
 
+        // Make verifyFinalState throw an exception
         doThrow(new AuctionValidatorException("Final state check failed")).when(spiedVerifier).verifyFinalState();
 
         spiedAuction.run();
 
-        this.invokeAuctionLoop(verify(spiedAuction, times(1)), totalQuantity / 2);
+        // Verify that the auction loop part still executed as expected before the final state verification failed
+        verify(mockOwnBidder, times(totalQuantity / 2)).placeBid();
+        verify(mockOtherBidder, times(totalQuantity / 2)).placeBid();
+        verify(mockOwnBidder, times(totalQuantity / 2)).bids(anyInt(), anyInt());
+        verify(mockOtherBidder, times(totalQuantity / 2)).bids(anyInt(), anyInt());
+        verify(spiedVerifier, times(totalQuantity / 2)).verifyRound(anyInt(), anyInt());
+
+        // Verify that verifyFinalState was indeed called (and then threw an exception)
         verify(spiedVerifier, times(1)).verifyFinalState();
     }
 
